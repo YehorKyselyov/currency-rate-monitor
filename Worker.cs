@@ -60,7 +60,8 @@ public class Worker : BackgroundService
         var currenciesData = ParseCurrencyRates(response);
         if (currenciesData == null) return;
 
-        SaveCurrencyRates(currenciesData);
+        if (CurrentOptions.WriteNewDataToFile)
+            SaveCurrencyRates(currenciesData);
 
         if (CurrentOptions.LogToConsole)
             LogCurrencyRates(currenciesData);
@@ -171,4 +172,9 @@ public class WorkerOptions
     /// A value indicating whether to log the currency rates to the console.
     /// </summary>
     public bool LogToConsole { get; set; }
+    
+    /// <summary>
+    /// A value indicating whether new data should be written to the file.
+    /// </summary>
+    public bool WriteNewDataToFile { get; set; }
 }

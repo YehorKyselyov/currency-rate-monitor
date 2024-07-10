@@ -15,7 +15,8 @@ public class ControlHandler
         "Interval",
         "OutputFormat",
         "OutputPath",
-        "LogToConsole"
+        "LogToConsole",
+        "WriteNewDataToFile"
     };
 
     private readonly HashSet<string> validFormats = new HashSet<string>
@@ -81,6 +82,7 @@ public class ControlHandler
                     return false;
                 }
                 break;
+
             case "OutputFormat":
                 if (!validFormats.Contains(value.ToLower()))
                 {
@@ -101,6 +103,14 @@ public class ControlHandler
                 if (!bool.TryParse(value, out bool log))
                 {
                     _logger.LogWarning("Invalid LogToConsole value: {value}. Must be a boolean.", value);
+                    return false;
+                }
+                break;
+            
+            case "WriteNewDataToFile":
+                if (!bool.TryParse(value, out bool log2))
+                {
+                    _logger.LogWarning("Invalid WriteNewDataToFile value: {value}. Must be a boolean.", value);
                     return false;
                 }
                 break;
@@ -130,14 +140,14 @@ public class ControlHandler
             key = keys[^1];
         }
 
-        var typedValue = ConvertValueToExpectedType(key, value);
+        var typedValue = ConvertValueToExpectedTypeForKey(key, value);
         section[key] = typedValue;
         
         File.WriteAllText(_settingsFilePath, jObject.ToString());
         _logger.LogInformation("Updated {key} to {value} in appsettings.json", key, value);
     }
 
-    private JToken ConvertValueToExpectedType(string key, string value)
+    private JToken ConvertValueToExpectedTypeForKey(string key, string value)
     {
         JToken typedValue = value;
         switch (key)
@@ -147,6 +157,10 @@ public class ControlHandler
                 break;
 
             case "LogToConsole":
+                typedValue = bool.Parse(value);
+                break;
+            
+            case "WriteNewDataToFile":
                 typedValue = bool.Parse(value);
                 break;
         }
