@@ -4,10 +4,10 @@ namespace NBU_Currency_Rate_Monitor;
 
 public struct CurrencyData
 {
-    public string Code { get; }
-    public double Rate { get; }
-    public string Date { get; }
-    public string Time { get; }
+    public string Code;
+    public double Rate;
+    public string Date;
+    public string Time;
 
     public CurrencyData(string code, double rate, string date, string time)
     {
@@ -21,6 +21,7 @@ public struct CurrencyData
 
 public class CurrenciesData : List<CurrencyData>
 {
+    public CurrenciesData() { }
     public CurrenciesData(string xmlInput)
     {
         var xmlDoc = new XmlDocument();

@@ -10,11 +10,14 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly HttpClient _httpClient = new();
     private readonly IOptionsMonitor<WorkerOptions> _optionsMonitor;
+    private readonly ControlHandler _controlHandler;
 
-    public Worker(ILogger<Worker> logger, IOptionsMonitor<WorkerOptions> optionsMonitor)
+
+    public Worker(ILogger<Worker> logger, IOptionsMonitor<WorkerOptions> optionsMonitor, ControlHandler controlHandler)
     {
         _logger = logger;
         _optionsMonitor = optionsMonitor;
+        _controlHandler = controlHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,6 +33,7 @@ public class Worker : BackgroundService
     public override Task StartAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Service is starting...");
+        _controlHandler.StartListening();
         return base.StartAsync(cancellationToken);
     }
 
@@ -57,11 +61,6 @@ public class Worker : BackgroundService
             return;
         }
 
-        if (response == null)
-        {
-            _logger.LogError("Received an empty response from the currency rates API");
-            return;
-        }
 
         CurrenciesData currenciesData;
         try
@@ -74,10 +73,6 @@ public class Worker : BackgroundService
             return;
         }
 
-        foreach (var currencyData in currenciesData)
-            _logger.LogInformation("Currency Data: Code = {Code}, Rate = {Rate}, Date = {Date}, Time = {Time}",
-                currencyData.Code, currencyData.Rate, currencyData.Date, currencyData.Time);
-
         // Create DataIO dynamically with current options
         try
         {
@@ -89,14 +84,18 @@ public class Worker : BackgroundService
                 "xml" => new XmlDataSerializer(),
                 _ => throw new InvalidOperationException("Unsupported output format")
             };
-
-            var dataIO = new DataIO(dataSerializer, currentOptions.OutputPath);
-            await dataIO.SaveDataAsync(currenciesData);
+            var outputPath = $"{currentOptions.OutputPath}.{currentOptions.OutputFormat.ToLower()}";
+            dataSerializer.Serialize(currenciesData, outputPath);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error saving currency rates data");
         }
+        
+        if(!_optionsMonitor.CurrentValue.LogToConsole) return;
+        foreach (var currencyData in currenciesData)
+            _logger.LogInformation("Currency Data: Code = {Code}, Rate = {Rate}, Date = {Date}, Time = {Time}",
+                currencyData.Code, currencyData.Rate, currencyData.Date, currencyData.Time);
     }
 }
 
@@ -106,4 +105,5 @@ public class WorkerOptions
     public string CurrencyApiUrl { get; set; }
     public string OutputFormat { get; set; }
     public string OutputPath { get; set; }
+    public bool LogToConsole { get; set; }
 }

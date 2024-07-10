@@ -5,8 +5,15 @@ namespace NBU_Currency_Rate_Monitor.Serializers;
 
 public class JsonDataSerializer : IDataSerializer
 {
-    public string Serialize(CurrenciesData data)
+    public void Serialize(CurrenciesData data, string filePath)
     {
-        return JsonSerializer.Serialize(data);
+        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions {IncludeFields = true, WriteIndented = true});
+        File.WriteAllText(filePath, json);
+    }
+
+    public CurrenciesData Deserialize(string filePath)
+    {
+        var json = File.ReadAllText(filePath);
+        return JsonSerializer.Deserialize<CurrenciesData>(json);
     }
 }

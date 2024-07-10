@@ -1,37 +1,5 @@
-﻿Resources/Untitled.png
-*.txt
-!license.txt
-!src_readme.txt
-*user
-
-*.csv
-Backup/
-UpgradeLog.htm
-
-# ide generated files
+# IDE generated files
 .vs
 bin
 obj
-Hoover.csproj.DotSettings
 .idea/
-
-# AutoCAD temporary files
-*.dwl
-*.dwl2
-*.dwg
-*.err
-nuget.exe
-
-# Test input drawings
-!Tests/TestFiles/*.dwg
-
-# Readme for DevEnvironment
-!DevEnvironment/Readme.txt
-
-# Test output files
-TestResult.xml
-
-# deployment files
-installer/HooverSpace_bin
-installer/Obfuscator_Output
-insteller/HooverSpace.bundle/Contents

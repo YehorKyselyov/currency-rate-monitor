@@ -9,6 +9,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.Configure<WorkerOptions>(context.Configuration);
+        services.AddSingleton<ControlHandler>();
         services.AddHostedService<Worker>();
     })
     .Build();

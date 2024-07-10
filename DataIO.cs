@@ -5,17 +5,19 @@ namespace NBU_Currency_Rate_Monitor;
 public class DataIO
 {
     private readonly IDataSerializer _dataSerializer;
-    private readonly string _outputPath;
 
-    public DataIO(IDataSerializer dataSerializer, string outputPath)
+    public DataIO(IDataSerializer dataSerializer)
     {
         _dataSerializer = dataSerializer;
-        _outputPath = outputPath;
     }
 
-    public async Task SaveDataAsync(CurrenciesData data)
+    public async Task SaveDataAsync(CurrenciesData data, string filePath)
     {
-        var serializedData = _dataSerializer.Serialize(data);
-        await File.WriteAllTextAsync(_outputPath, serializedData);
+        await Task.Run(() => _dataSerializer.Serialize(data, filePath));
+    }
+
+    public async Task<CurrenciesData> LoadDataAsync(string filePath)
+    {
+        return await Task.Run(() => _dataSerializer.Deserialize(filePath));
     }
 }

@@ -2,5 +2,6 @@
 
 public interface IDataSerializer
 {
-    string Serialize(CurrenciesData data);
+    public void Serialize(CurrenciesData data, string filePath);
+    public CurrenciesData Deserialize(string filePath);
 }
