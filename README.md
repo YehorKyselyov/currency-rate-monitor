@@ -18,8 +18,8 @@ Currency Rate Monitor is a service application that periodically fetches currenc
 ### Steps
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/NBU-Currency-Rate-Monitor.git
-    cd NBU-Currency-Rate-Monitor
+    git clone https://github.com/YehorKyselyov/currency-rate-monitor.git
+    cd currency-rate-monitor
     ```
 
 2. Build the project:
