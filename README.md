@@ -1,6 +1,6 @@
-# NBU Currency Rate Monitor
+# Currency Rate Monitor
 
-NBU Currency Rate Monitor is a service application that periodically fetches currency rates from the National Bank of Ukraine, processes the data, and stores it in various formats (JSON, CSV, XML). The application supports dynamic configuration updates via control codes and can be hosted on Windows.
+Currency Rate Monitor is a service application that periodically fetches currency rates from the National Bank of Ukraine, processes the data, and stores it in various formats (JSON, CSV, XML). The application supports dynamic configuration updates via control codes and can be hosted on Windows.
 
 ## Table of Contents
 - [Installation](#installation)
