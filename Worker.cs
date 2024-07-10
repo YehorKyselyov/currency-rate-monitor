@@ -1,5 +1,4 @@
-using System.Text;
-using System.Text.Json;
+using System.Reflection;
 using Microsoft.Extensions.Options;
 using NBU_Currency_Rate_Monitor.Serializers;
 
@@ -122,7 +121,9 @@ public class Worker : BackgroundService
                 "xml" => new XmlDataSerializer(),
                 _ => throw new InvalidOperationException("Unsupported output format")
             };
-            var outputPath = $"{CurrentOptions.OutputPath}.{CurrentOptions.OutputFormat.ToLower()}";
+            var exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var outputPath = Path.Combine(exeDirectory!, $"{CurrentOptions.OutputPath}.{CurrentOptions.OutputFormat.ToLower()}");
+
             dataSerializer.Serialize(currenciesData, outputPath);
         }
         catch (Exception ex)
