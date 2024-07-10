@@ -7,13 +7,17 @@ public class JsonDataSerializer : IDataSerializer
 {
     public void Serialize(CurrenciesData data, string filePath)
     {
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions {IncludeFields = true, WriteIndented = true});
+        var existingData = File.Exists(filePath) ? Deserialize(filePath) : new CurrenciesData();
+
+        existingData.AddRange(data);
+
+        var json = JsonSerializer.Serialize(existingData, new JsonSerializerOptions {IncludeFields = true, WriteIndented = true});
         File.WriteAllText(filePath, json);
     }
 
     public CurrenciesData Deserialize(string filePath)
     {
         var json = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<CurrenciesData>(json);
+        return JsonSerializer.Deserialize<CurrenciesData>(json, new JsonSerializerOptions { IncludeFields = true });
     }
 }
