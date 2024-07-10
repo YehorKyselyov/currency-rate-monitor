@@ -83,6 +83,14 @@ public class ControlHandler
                     return false;
                 }
                 break;
+
+            case "LogToConsole":
+                if (!bool.TryParse(value, out bool log))
+                {
+                    _logger.LogWarning("Invalid LogToConsole value: {value}. Must be a boolean.", value);
+                    return false;
+                }
+                break;
         }
 
         return true;
@@ -104,9 +112,26 @@ public class ControlHandler
             key = keys[^1];
         }
 
-        section[key] = value;
+        var typedValue = ConvertValueToExpectedType(key, value);
+        section[key] = typedValue;
         
         File.WriteAllText(_settingsFilePath, jObject.ToString());
         _logger.LogInformation("Updated {key} to {value} in appsettings.json", key, value);
+    }
+
+    private JToken ConvertValueToExpectedType(string key, string value)
+    {
+        JToken typedValue = value;
+        switch (key)
+        {
+            case "Interval":
+                typedValue = int.Parse(value);
+                break;
+
+            case "LogToConsole":
+                typedValue = bool.Parse(value);
+                break;
+        }
+        return typedValue;
     }
 }

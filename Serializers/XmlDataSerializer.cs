@@ -8,7 +8,6 @@ public class XmlDataSerializer : IDataSerializer
     {
         CurrenciesData existingData;
 
-        // Read the existing data
         existingData = File.Exists(filePath) ? Deserialize(filePath) : new CurrenciesData();
         existingData.AddRange(data);
 
