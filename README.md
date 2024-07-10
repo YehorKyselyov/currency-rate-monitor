@@ -88,6 +88,7 @@ The configuration file `appsettings.json` contains various settings to customize
     }
   }
 }
+```
 
 ## Dependencies
 The application uses the following external libraries:
