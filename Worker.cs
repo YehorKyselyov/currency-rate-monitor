@@ -5,6 +5,9 @@ using NBU_Currency_Rate_Monitor.Serializers;
 
 namespace NBU_Currency_Rate_Monitor;
 
+/// <summary>
+/// Background service that processes currency rates.
+/// </summary>
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
@@ -20,6 +23,9 @@ public class Worker : BackgroundService
         _controlHandler = controlHandler;
     }
 
+    /// <summary>
+    /// The main execution loop of the background service.
+    /// </summary>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -43,6 +49,9 @@ public class Worker : BackgroundService
         return base.StopAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Processes currency rates by fetching, parsing, saving, and logging them.
+    /// </summary>
     private async Task ProcessCurrencyRates()
     {
         var response = await FetchCurrencyRatesAsync();
@@ -57,6 +66,10 @@ public class Worker : BackgroundService
             LogCurrencyRates(currenciesData);
     }
 
+    /// <summary>
+    /// Fetches the currency rates from the configured API.
+    /// </summary>
+    /// <returns>The API response as a string, or null if an error occurred.</returns>
     private async Task<string?> FetchCurrencyRatesAsync()
     {
         try
@@ -75,6 +88,11 @@ public class Worker : BackgroundService
         return null;
     }
 
+    /// <summary>
+    /// Parses the currency rates from the API response.
+    /// </summary>
+    /// <param name="response">The API response as a string.</param>
+    /// <returns>A <see cref="CurrenciesData"/> object, or null if parsing failed.</returns>
     private CurrenciesData? ParseCurrencyRates(string response)
     {
         try
@@ -88,6 +106,10 @@ public class Worker : BackgroundService
         }
     }
 
+    /// <summary>
+    /// Saves the parsed currency rates to the configured output path.
+    /// </summary>
+    /// <param name="currenciesData">The parsed currency rates.</param>
     private void SaveCurrencyRates(CurrenciesData currenciesData)
     {
         try
@@ -107,7 +129,11 @@ public class Worker : BackgroundService
             _logger.LogError(ex, "Error saving currency rates data");
         }
     }
-
+    
+    /// <summary>
+    /// Logs the parsed currency rates to the console.
+    /// </summary>
+    /// <param name="currenciesData">The parsed currency rates.</param>
     private void LogCurrencyRates(CurrenciesData currenciesData)
     {
         foreach (var currencyData in currenciesData)
@@ -116,11 +142,33 @@ public class Worker : BackgroundService
     }
 }
 
+/// <summary>
+/// Represents the configuration options for the <see cref="Worker"/> service.
+/// </summary>
 public class WorkerOptions
 {
-    public int Interval { get; set; } // in milliseconds
+    /// <summary>
+    /// The interval between each processing cycle, in milliseconds.
+    /// </summary>
+    public int Interval { get; set; }
+
+    /// <summary>
+    /// The URL of the currency API.
+    /// </summary>
     public string CurrencyApiUrl { get; set; }
+
+    /// <summary>
+    /// The format of the output file (e.g., "json", "csv", "xml").
+    /// </summary>
     public string OutputFormat { get; set; }
+
+    /// <summary>
+    /// The path of the output file without extension.
+    /// </summary>
     public string OutputPath { get; set; }
+
+    /// <summary>
+    /// A value indicating whether to log the currency rates to the console.
+    /// </summary>
     public bool LogToConsole { get; set; }
 }

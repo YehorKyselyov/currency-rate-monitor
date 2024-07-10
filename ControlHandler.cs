@@ -2,6 +2,9 @@
 
 namespace NBU_Currency_Rate_Monitor;
 
+/// <summary>
+/// Handles control commands for dynamically updating application settings.
+/// </summary>
 public class ControlHandler
 {
     private readonly ILogger<ControlHandler> _logger;
@@ -27,6 +30,9 @@ public class ControlHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// Starts listening for control commands from the console.
+    /// </summary>
     public void StartListening()
     {
         Task.Run(() =>
@@ -51,6 +57,13 @@ public class ControlHandler
         });
     }
     
+    
+    /// <summary>
+    /// Validates the input received from user.
+    /// </summary>
+    /// <param name="key">The configuration key.</param>
+    /// <param name="value">The configuration value.</param>
+    /// <returns>True if the input is valid; otherwise, false.</returns>
     private bool ValidateInput(string key, string value)
     {
         if (!validKeys.Contains(key))
@@ -96,6 +109,11 @@ public class ControlHandler
         return true;
     }
 
+    /// <summary>
+    /// Updates the application settings in the configuration file.
+    /// </summary>
+    /// <param name="key">The configuration key.</param>
+    /// <param name="value">The configuration value.</param>
     private void UpdateAppSettings(string key, string value)
     {
         var json = File.ReadAllText(_settingsFilePath);

@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-NBU_Currency_Rate_Monitor-116130A2-D4E0-4564-9238-C0B478AE95F5</UserSecretsId>
         <RootNamespace>NBU_Currency_Rate_Monitor</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
