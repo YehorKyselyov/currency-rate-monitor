@@ -10,8 +10,6 @@ Currency Rate Monitor is a service application that periodically fetches currenc
 - [Usage](#usage)
 - [Troubleshooting](#troubleshooting)
 
-Certainly! Here is the updated README with the additional information on how to run the service directly without using Windows Services:
-
 ## Installation
 
 ### Prerequisites
